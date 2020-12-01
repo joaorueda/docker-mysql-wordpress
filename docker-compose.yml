@@ -1,0 +1,28 @@
+version: '3'
+services: 
+  banco:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: wpteste
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: 'MINHASENHAFOD@'
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+  site:
+    image: wordpress
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: banco
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: 'MINHASENHAFOD@'
+      WORDPRESS_DB_NAME: wpteste
+    volumes:
+      - ./wordpress/www:/var/www/html
+      - ./wordpress/themes:/var/www/html/wp-content/themes/
+      - ./wordpress/plugins:/var/www/html/wp-content/plugins/
+    depends_on: 
+      - banco
